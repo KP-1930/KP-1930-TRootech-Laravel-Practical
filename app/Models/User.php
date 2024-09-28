@@ -6,14 +6,16 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Traits\HasRoles;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles, HasApiTokens;
+    use HasFactory, Notifiable, HasRoles, HasApiTokens, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -46,9 +48,24 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // public function assignRoleToUser($userId, $roleName)
-    // {
-    //     $user = User::find($userId);
-    //     $user->assignRole($roleName);
-    // }
+    protected static $logAttributes = ['name', 'email'];
+    protected static $logName = 'user';
+
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            activity()
+                ->performedOn($user)
+                ->causedBy(auth()->user())
+                ->log('User created.');
+        });
+
+        static::updated(function ($user) {
+            Log::info('Update event triggered for user ID: ' . $user->id);
+            activity()
+                ->performedOn($user)
+                ->causedBy(auth()->user())
+                ->log('User updated.');
+        });
+    }
 }

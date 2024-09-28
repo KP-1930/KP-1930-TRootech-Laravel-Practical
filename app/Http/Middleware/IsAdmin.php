@@ -20,6 +20,10 @@ class IsAdmin
         if (!Auth::check()) { 
             abort(403, 'Access denied');  
         }
+
+        if (Auth::user()->is_admin !== 0) {
+            abort(403, 'Access denied');
+        }
         
         return $next($request); 
     }

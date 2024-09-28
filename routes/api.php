@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,11 +25,26 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
+
+    Route::get('/users', [UserController::class, 'index']);
+    Route::post('/users', [UserController::class, 'store']);
+    Route::get('/users/{id}', [UserController::class, 'show']);
+    Route::put('/users/{id}', [UserController::class, 'update']);
+    Route::delete('/users/{id}', [UserController::class, 'destroy']);
+
+    Route::get('/roles', [RoleController::class, 'index']);
+    Route::post('/roles', [RoleController::class, 'store']);
+    Route::get('/roles/{id}', [RoleController::class, 'show']);
+    Route::put('/roles/{id}', [RoleController::class, 'update']);
+    Route::delete('/roles/{id}', [RoleController::class, 'destroy']);
+
+
     Route::get('category', [CategoryController::class, 'index']);
     Route::post('category/store', [CategoryController::class, 'store']);
     Route::get('category/show/{category}', [CategoryController::class, 'show']);
     Route::any('category/update/{category}', [CategoryController::class, 'update']);
     
     Route::get('category/delete/{category}', [CategoryController::class, 'delete']);
+    
 });

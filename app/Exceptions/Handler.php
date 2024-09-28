@@ -39,6 +39,14 @@ class Handler extends ExceptionHandler
         });
     }
 
+    protected function unauthenticated($request, \Illuminate\Auth\AuthenticationException $exception)
+    {
+        return response()->json([
+            'success' => false,
+            'message' => 'Your token is invalid or expired. Please log in again.',
+        ], 401);
+    }
+
     public function render($request, Throwable $exception)
     {
         if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
