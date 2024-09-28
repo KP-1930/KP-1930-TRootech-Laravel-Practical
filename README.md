@@ -12,6 +12,8 @@
 2) Role : viewer  => Permission : ['role-list','role-edit'] 
 3) Role : editor  => Permission : ['role-list'] 
 
+video link : https://www.awesomescreenshot.com/video/32005218?key=e7d7603138071872960e0dfe928d7c86
+
 
 Here are step for run project : 
 1) set database credentials as well as set mail credentials for password reset functionality
