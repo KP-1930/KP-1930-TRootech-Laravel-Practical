@@ -7,6 +7,11 @@
    -> Dashboard (with user count as well as role count)
 => Role & Permission Middleware
 
+<!-- in projection permission be like -->
+1) Role : admin   => Permission : ['role-create','role-edit','role-list','role-delete']  (Full Rights)
+2) Role : viewer  => Permission : ['role-list','role-edit'] 
+3) Role : editor  => Permission : ['role-list'] 
+
 
 Here are step for run project : 
 1) set database credentials as well as set mail credentials for password reset functionality
